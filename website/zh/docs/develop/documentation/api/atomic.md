@@ -1,10 +1,10 @@
 # Atomic operations
 
-In Taichi, augmented assignments (e.g., `x[i] += 1`) are automatically [atomic](https://en.wikipedia.org/wiki/Fetch-and-add).
+在taichi中, 复合赋值算法 (e.g., `x[i] += 1`) 是通过原子运算完成的 [atomic](https://en.wikipedia.org/wiki/Fetch-and-add)。
 
-::: warning
+::: 警告
 
-When modifying global variables in parallel, make sure you use atomic operations. For example, to sum up all the elements in `x`, :
+当并行的对全局变量修改时, 请确保使用的是原子运算。例如， 例如对`x`的所有元素求和 :
 
     @ti.kernel
     def sum():
@@ -20,28 +20,27 @@ When modifying global variables in parallel, make sure you use atomic operations
 
 :::
 
-::: note
+::: 注解
 
-When atomic operations are applied to local values, the Taichi compiler will try to demote these operations into their non-atomic counterparts.
-:::
+当原子操作被用于局部变量, taichi的编译器会试图用非原子运算的计算符代替。:::
 
-Apart from the augmented assignments, explicit atomic operations, such as `ti.atomic_add`, also do read-modify-write atomically. These operations additionally return the **old value** of the first argument.
+除了增加的功能, 可以显式的使用原子运算, 例如 `ti.atomic_add`, 也会原子化的进行进行 读取-修改-写入。 这样的操作还会返回第一个参数的 **原始值** 。
 
-Below is a list of all explicit atomic operations:
+如下为一系列显式的原子运算:
 
 ::: {.function} ti.atomic_add(x, y)
 :::
 
 ::: {.function} ti.atomic_sub(x, y)
 
-Atomically compute `x + y` or `x - y` and store the result in `x`.
+原子化的计算 `x + y` or `x - y` 并且将结果存入 `x`.
 
-return
+返回
 :
 
-The old value of `x`.
+ `x` 的初始值.
 
-For example, :
+例如, :
 
     x[i] = 3
     y[i] = 4
@@ -58,17 +57,17 @@ For example, :
 
 ::: {.function} ti.atomic_xor(x, y)
 
-Atomically compute `x & y` (bitwise and), `x | y` (bitwise or), or `x ^ y` (bitwise xor), and store the result in `x`.
+原子化的计算 `x & y` (按位取与), `x | y` (按位取或), or `x ^ y` (按位取异或), 并将结果存入 in `x`.
 
-return
+返回
 :
 
-The old value of `x`.
+ `x`的初始值.
 :::
 
-::: note
+::: 注解
 
-Supported atomic operations on each backend:
+在不同后端上对原子运算的支持:
 
 | type | CPU/CUDA | OpenGL | Metal | C source |
 | ---- | -------- | ------ | ----- | -------- |
@@ -77,5 +76,5 @@ Supported atomic operations on each backend:
 | i64  | > OK     | > EXT  | > N/A | > OK     |
 | f64  | > OK     | > EXT  | > N/A | > OK     |
 
-(OK: supported; EXT: require extension; N/A: not available)
+(OK: 支持; EXT: 需要扩展; N/A: 不支持)
 :::
